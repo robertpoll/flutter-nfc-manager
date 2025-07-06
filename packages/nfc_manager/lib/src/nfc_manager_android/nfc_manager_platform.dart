@@ -21,6 +21,8 @@ final class NfcManagerAndroidPlatform implements NfcManager {
   }) {
     return NfcManagerAndroid.instance.enableReaderMode(
       flags: {
+        // Hardcode Ndef check skip
+        NfcReaderFlagAndroid.skipNdefCheck,
         if (pollingOptions.contains(NfcPollingOption.iso14443)) ...{
           NfcReaderFlagAndroid.nfcA,
           NfcReaderFlagAndroid.nfcB,
