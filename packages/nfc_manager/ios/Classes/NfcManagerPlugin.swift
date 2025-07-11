@@ -390,7 +390,9 @@ public class NfcManagerPlugin: NSObject, FlutterPlugin, HostApiPigeon {
 
 extension NfcManagerPlugin: NFCTagReaderSessionDelegate {
   public func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
-    flutterApi.tagSessionDidBecomeActive { _ in /* no op */ }
+      DispatchQueue.main.async {
+          self.flutterApi.tagSessionDidBecomeActive { _ in /* no op */ }
+      }
   }
 
   public func tagReaderSession(_ session: NFCTagReaderSession, didInvalidateWithError error: Error) {
@@ -398,7 +400,9 @@ extension NfcManagerPlugin: NFCTagReaderSessionDelegate {
       code: convert((error as! NFCReaderError).code),
       message: error.localizedDescription
     )
-    flutterApi.tagSessionDidInvalidateWithError(error: pigeonError) { _ in /* no op */ }
+      DispatchQueue.main.async {
+          self.flutterApi.tagSessionDidInvalidateWithError(error: pigeonError) { _ in /* no op */ }
+      }
   }
 
   public func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
@@ -422,7 +426,9 @@ extension NfcManagerPlugin: NFCTagReaderSessionDelegate {
           return
         }
         self.cachedTags[pigeon.handle] = tag
-        self.flutterApi.tagSessionDidDetect(tag: pigeon) { _ in /* no op */ }
+          DispatchQueue.main.async {
+              self.flutterApi.tagSessionDidDetect(tag: pigeon) { _ in /* no op */ }
+          }
         if !self.shouldInvalidateSessionAfterFirstRead { session.restartPolling() }
       }
     }
@@ -431,7 +437,9 @@ extension NfcManagerPlugin: NFCTagReaderSessionDelegate {
 
 extension NfcManagerPlugin: NFCVASReaderSessionDelegate {
   public func readerSessionDidBecomeActive(_ session: NFCVASReaderSession) {
-    flutterApi.vasSessionDidBecomeActive { _ in /* no op */ }
+      DispatchQueue.main.async {
+          self.flutterApi.vasSessionDidBecomeActive { _ in /* no op */ }
+      }
   }
 
   public func readerSession(_ session: NFCVASReaderSession, didInvalidateWithError error: Error) {
@@ -439,11 +447,15 @@ extension NfcManagerPlugin: NFCVASReaderSessionDelegate {
       code: convert((error as! NFCReaderError).code),
       message: error.localizedDescription
     )
-    flutterApi.vasSessionDidInvalidateWithError(error: pigeonError) { _ in /* no op */ }
+      DispatchQueue.main.async {
+          self.flutterApi.vasSessionDidInvalidateWithError(error: pigeonError) { _ in /* no op */ }
+      }
   }
 
   public func readerSession(_ session: NFCVASReaderSession, didReceive responses: [NFCVASResponse]) {
-    flutterApi.vasSessionDidReceive(responses: responses.map { convert($0) }) { _ in /* no op */ }
+      DispatchQueue.main.async {
+          self.flutterApi.vasSessionDidReceive(responses: responses.map { convert($0) }) { _ in /* no op */ }
+      }
   }
 }
 
