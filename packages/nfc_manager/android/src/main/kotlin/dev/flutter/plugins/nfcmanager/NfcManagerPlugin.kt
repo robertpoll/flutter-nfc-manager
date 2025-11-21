@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
+import android.os.Bundle
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
@@ -87,7 +88,9 @@ class NfcManagerPlugin: FlutterPlugin, ActivityAware, HostApiPigeon, BroadcastRe
   }
 
   override fun nfcAdapterEnableReaderMode(flags: List<ReaderFlagPigeon>) {
-    getAdapter().enableReaderMode(activity, { onTagDiscovered(it) }, toInt(flags), null)
+    val extras = Bundle()
+    extras.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, 5000)
+    getAdapter().enableReaderMode(activity, { onTagDiscovered(it) }, toInt(flags), extras)
   }
 
   override fun nfcAdapterDisableReaderMode() {
