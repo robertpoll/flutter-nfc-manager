@@ -331,6 +331,12 @@ class NfcManagerPlugin: FlutterPlugin, ActivityAware, HostApiPigeon, BroadcastRe
       this.connectedTech = tech
       return tech
     }
+    if (!connectedTech.isConnected) {
+      try { connectedTech.close() } catch (e: Exception) { /* no op */ }
+      tech.connect()
+      this.connectedTech = tech
+      return tech
+    }
     return tech
   }
 }
